@@ -5,165 +5,290 @@
 <meta name="viewport" content="width=device-width, initial-scale=1.0">
 <title>ぴーbot公式サイト</title>
 
+<link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.2/css/all.min.css" />
+
 <style>
 :root{
-  --bg:#0f172a;
-  --card:#111827;
-  --text:#ffffff;
-  --accent:#22c55e;
+  --bg: #0f172a;
+  --card: #1e293b;
+  --text: #f8fafc;
+  --accent: #22c55e;
+  --accent-hover: #16a34a;
+  --nav-bg: rgba(15, 23, 42, 0.8);
 }
 
 body.light{
-  --bg:#f1f5f9;
-  --card:#ffffff;
-  --text:#0f172a;
+  --bg: #f8fafc;
+  --card: #ffffff;
+  --text: #0f172a;
+  --nav-bg: rgba(248, 250, 252, 0.8);
 }
 
 body{
-  margin:0;
-  font-family:Arial, sans-serif;
-  background:var(--bg);
-  color:var(--text);
-  transition:0.3s;
+  margin: 0;
+  font-family: 'Helvetica Neue', Arial, 'Hiragino Kaku Gothic ProN', 'Hiragino Sans', sans-serif;
+  background: var(--bg);
+  color: var(--text);
+  transition: background 0.3s, color 0.3s;
+  line-height: 1.6;
 }
 
-/* ナビ */
-nav{
-  display:flex;
-  justify-content:space-between;
-  padding:15px 25px;
-  background:var(--card);
-  position:sticky;
-  top:0;
+/* ナビゲーションをグラスモーフィズムに */
+nav {
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+  padding: 15px 5%;
+  background: var(--nav-bg);
+  backdrop-filter: blur(10px); /* 背景ぼかし */
+  position: sticky;
+  top: 0;
+  z-index: 1000;
+  border-bottom: 1px solid rgba(255, 255, 255, 0.1);
 }
 
-nav a{
-  color:var(--text);
-  text-decoration:none;
-  margin:0 10px;
-  font-weight:bold;
+body.light nav {
+  border-bottom: 1px solid rgba(0, 0, 0, 0.05);
 }
 
-nav a:hover{
-  color:var(--accent);
+nav .logo {
+  font-size: 1.5rem;
+  font-weight: 800;
+  color: var(--accent);
 }
 
-.toggle{
-  position:fixed;
-  top:15px;
-  right:15px;
+nav .links a {
+  color: var(--text);
+  text-decoration: none;
+  margin-left: 20px;
+  font-weight: 600;
+  font-size: 0.95rem;
+  transition: 0.2s;
 }
 
-header{
-  padding:80px 20px;
-  text-align:center;
-  background:linear-gradient(135deg,#16a34a,#22c55e);
-  color:white;
+nav .links a:hover {
+  color: var(--accent);
 }
 
-h1{margin:0;font-size:42px;}
-
-.container{
-  max-width:1000px;
-  margin:auto;
-  padding:40px 20px;
+/* ヘッダーをよりリッチに */
+header {
+  padding: 100px 20px;
+  text-align: center;
+  background: radial-gradient(circle at top right, #16a34a, #065f46);
+  color: white;
+  clip-path: ellipse(150% 100% at 50% 0%); /* 下部を少し丸くカット */
 }
 
-/* カード */
-.card{
-  background:var(--card);
-  padding:25px;
-  border-radius:14px;
-  margin-bottom:25px;
-  box-shadow:0 4px 20px rgba(0,0,0,0.25);
-
-  opacity:0;
-  transform:translateY(40px);
-  transition:0.6s;
+h1 {
+  margin: 0;
+  font-size: clamp(2rem, 8vw, 3.5rem); /* 画面サイズで可変 */
+  font-weight: 900;
+  letter-spacing: -1px;
 }
 
-.card.show{
-  opacity:1;
-  transform:translateY(0);
+header p {
+  font-size: 1.2rem;
+  opacity: 0.9;
+  margin: 20px auto;
+  max-width: 600px;
 }
 
-button{
-  background:var(--accent);
-  border:none;
-  padding:12px 22px;
-  border-radius:8px;
-  color:white;
-  font-size:16px;
-  cursor:pointer;
-  margin:8px;
+.container {
+  max-width: 1100px;
+  margin: auto;
+  padding: 60px 20px;
 }
 
-button:hover{transform:scale(1.05);}
+/* カードレイアウトをグリッドに */
+.grid {
+  display: grid;
+  grid-template-columns: repeat(auto-fit, minmax(300px, 1fr));
+  gap: 25px;
+}
 
-footer{
-  text-align:center;
-  padding:30px;
-  opacity:0.7;
+.card {
+  background: var(--card);
+  padding: 30px;
+  border-radius: 20px;
+  box-shadow: 0 10px 25px rgba(0,0,0,0.1);
+  border: 1px solid rgba(255,255,255,0.05);
+  
+  /* アニメーション用初期状態 */
+  opacity: 0;
+  transform: translateY(30px);
+  transition: 0.8s cubic-bezier(0.2, 0.8, 0.2, 1);
+}
+
+/* カードの基本設定（transitionを少し微調整してより滑らかに） */
+.card {
+  background: var(--card);
+  padding: 30px;
+  border-radius: 20px;
+  box-shadow: 0 10px 25px rgba(0,0,0,0.1);
+  border: 1px solid rgba(255,255,255,0.05);
+  
+  opacity: 0;
+  transform: translateY(30px);
+  /* transition に transform と box-shadow を追加して動きをリッチに */
+  transition: opacity 0.8s, transform 0.4s cubic-bezier(0.2, 0.8, 0.2, 1), box-shadow 0.4s;
+}
+
+/* ★ここを追加！マウスを乗せた時の動き */
+.card:hover {
+  transform: translateY(-10px) scale(1.02); /* 上に10px浮かせて、2%だけ大きくする */
+  box-shadow: 0 20px 40px rgba(0, 0, 0, 0.3); /* 影を強くして浮遊感を出す */
+  border: 1px solid var(--accent); /* 枠線をアクセントカラーに光らせる */
+  cursor: default; /* クリックできないので指マークにはせず、でも「反応してる感」を出す */
+}
+
+/* ライトモード時のホバー影の調整 */
+body.light .card:hover {
+  box-shadow: 0 20px 40px rgba(0, 0, 0, 0.1);
+}
+
+body.light .card {
+  border: 1px solid rgba(0,0,0,0.05);
+}
+
+.card.show {
+  opacity: 1;
+  transform: translateY(0);
+}
+
+.card h2 {
+  margin-top: 0;
+  color: var(--accent);
+  font-size: 1.4rem;
+  display: flex;
+  align-items: center;
+  gap: 10px;
+}
+
+/* ボタンのデザイン */
+.btn {
+  display: inline-block;
+  background: var(--accent);
+  border: none;
+  padding: 14px 28px;
+  border-radius: 50px; /* 丸いボタン */
+  color: white;
+  font-size: 16px;
+  font-weight: bold;
+  cursor: pointer;
+  text-decoration: none;
+  margin: 10px;
+  transition: 0.3s;
+  box-shadow: 0 4px 15px rgba(34, 197, 94, 0.3);
+}
+
+.btn:hover {
+  transform: translateY(-3px);
+  background: var(--accent-hover);
+  box-shadow: 0 6px 20px rgba(34, 197, 94, 0.4);
+}
+
+.btn-secondary {
+  background: rgba(255,255,255,0.2);
+  backdrop-filter: blur(5px);
+  box-shadow: none;
+}
+
+.btn-secondary:hover {
+  background: rgba(255,255,255,0.3);
+  box-shadow: none;
+}
+
+/* モード切替ボタン */
+.toggle-btn {
+  background: var(--card);
+  color: var(--text);
+  border: 1px solid rgba(128,128,128,0.3);
+  padding: 8px 15px;
+  border-radius: 12px;
+  cursor: pointer;
+  font-size: 1.2rem;
+}
+
+footer {
+  text-align: center;
+  padding: 60px 20px;
+  background: var(--card);
+  margin-top: 50px;
+  font-size: 0.9rem;
+  opacity: 0.8;
+}
+
+/* スマホ調整 */
+@media (max-width: 600px) {
+  nav { flex-direction: column; gap: 10px; }
+  nav .links { margin-bottom: 10px; }
+  header { padding: 60px 20px; }
 }
 </style>
 </head>
 
 <body>
 
-<div class="toggle">
-<button onclick="toggleMode()">🌙/☀️</button>
-</div>
-
 <nav>
-<div><b>ぴーbot</b></div>
-<div>
-<a href="index.html">ホーム</a>
-<a href="commands.html">コマンド</a>
-<a href="faq.html">FAQ</a>
-</div>
+  <div class="logo">ぴーbot</div>
+  <div class="links">
+    <a href="index.html">ホーム</a>
+    <a href="commands.html">コマンド</a>
+    <a href="faq.html">FAQ</a>
+    <button class="toggle-btn" onclick="toggleMode()">🌓</button>
+  </div>
 </nav>
 
 <header>
-<h1>ぴーbot公式サイト</h1>
-<p>サーバーを活性化しつつ、荒らしからサーバーを守る多機能bot</p>
+  <h1>ぴーbot公式サイト</h1>
+  <p>サーバーを活性化しつつ、荒らしからサーバーを守る。<br>あなたのDiscordライフを支える多機能bot。</p>
 
-<button onclick="window.open('https://discord.com/oauth2/authorize?client_id=1423901864038236221')">招待する</button>
-<button onclick="window.open('https://discord.gg/nr7heWHaPj')">サポートサーバー</button>
+  <a href="https://discord.com/oauth2/authorize?client_id=1423901864038236221" class="btn" target="_blank">
+    <i class="fab fa-discord"></i> 招待する
+  </a>
+  <a href="https://discord.gg/nr7heWHaPj" class="btn btn-secondary" target="_blank">
+    サポートサーバー
+  </a>
 </header>
 
 <div class="container">
+  <div class="grid">
 
-<div class="card">
-<h2>🤖 ぴーbotとは？</h2>
-<p>多機能で楽しく便利なDiscord Botです。</p>
-</div>
+    <div class="card">
+      <h2><i class="fas fa-robot"></i> ぴーbotとは？</h2>
+      <p>管理から娯楽まで、1つのbotで完結。サーバー運営をよりスマートに、より楽しくします。</p>
+    </div>
 
-<div class="card">
-<h2>🔢 数字カウントゲーム</h2>
-<p>協力して数字を繋げるゲーム機能。</p>
-</div>
+    <div class="card">
+      <h2><i class="fas fa-sort-numeric-up"></i> 数字カウント</h2>
+      <p>メンバー全員で数字を繋げていくゲーム。連続投稿制限など、細かいルール設定も可能です。</p>
+    </div>
 
-<div class="card">
-<h2>💰 コインシステム</h2>
-<p>活動やゲームでコインを獲得できます。</p>
-</div>
+    <div class="card">
+      <h2><i class="fas fa-coins"></i> コインシステム</h2>
+      <p>発言やミニゲームでコインをゲット！貯めたコインで役職を購入するなど、独自の経済圏を作れます。</p>
+    </div>
 
-<div class="card">
-<h2>👋 挨拶機能</h2>
-<p>挨拶メッセージに自動反応します。</p>
-</div>
+    <div class="card">
+      <h2><i class="fas fa-comment-dots"></i> 挨拶・反応機能</h2>
+      <p>「こんにちは」への反応や、新入メンバーへの自動メッセージなど、温かいサーバー作りをサポート。</p>
+    </div>
 
-<div class="card">
-<h2>📌 PINメッセージ更新</h2>
-<p>メッセージを自動で最新に保ちます。</p>
-</div>
+    <div class="card">
+      <h2><i class="fas fa-thumbtack"></i> ※⛔※PIN自動更新</h2>
+      <p>大事な告知を常に最新のメッセージとして表示。埋もれがちな情報をしっかり届けます。※現在停止中</p>
+    </div>
 
+    <div class="card">
+      <h2><i class="fas fa-shield-halved"></i> 荒らし対策</h2>
+      <p>強力なフィルタリングと管理機能で、あなたのコミュニティを24時間守り抜きます。</p>
+    </div>
+
+  </div>
 </div>
 
 <footer>
-© 2026 ぴーbot<br>
-開発: ぴー<br>
-botサーバー: TZ
+  <p>© 2026 ぴーbot | 開発: ぴー | 提携: TZ</p>
 </footer>
 
 <script>
@@ -171,22 +296,19 @@ function toggleMode(){
   document.body.classList.toggle("light");
 }
 
-/* スクロール表示 */
+/* スクロール表示のアニメーション */
 const cards = document.querySelectorAll('.card');
-
-function showCards(){
-  const trigger = window.innerHeight * 0.85;
-
-  cards.forEach(card=>{
-    const top = card.getBoundingClientRect().top;
-    if(top < trigger){
-      card.classList.add('show');
+const observer = new IntersectionObserver((entries) => {
+  entries.forEach(entry => {
+    if (entry.isIntersecting) {
+      entry.target.classList.add('show');
     }
   });
-}
+}, { threshold: 0.1 });
 
-window.addEventListener('scroll', showCards);
-showCards();
+cards.forEach(card => {
+  observer.observe(card);
+});
 </script>
 
 </body>
