@@ -1,0 +1,193 @@
+<!DOCTYPE html>
+<html lang="ja">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>ぴーbot公式サイト</title>
+
+<style>
+:root{
+  --bg:#0f172a;
+  --card:#111827;
+  --text:#ffffff;
+  --accent:#22c55e;
+}
+
+body.light{
+  --bg:#f1f5f9;
+  --card:#ffffff;
+  --text:#0f172a;
+}
+
+body{
+  margin:0;
+  font-family:Arial, sans-serif;
+  background:var(--bg);
+  color:var(--text);
+  transition:0.3s;
+}
+
+/* ナビ */
+nav{
+  display:flex;
+  justify-content:space-between;
+  padding:15px 25px;
+  background:var(--card);
+  position:sticky;
+  top:0;
+}
+
+nav a{
+  color:var(--text);
+  text-decoration:none;
+  margin:0 10px;
+  font-weight:bold;
+}
+
+nav a:hover{
+  color:var(--accent);
+}
+
+.toggle{
+  position:fixed;
+  top:15px;
+  right:15px;
+}
+
+header{
+  padding:80px 20px;
+  text-align:center;
+  background:linear-gradient(135deg,#16a34a,#22c55e);
+  color:white;
+}
+
+h1{margin:0;font-size:42px;}
+
+.container{
+  max-width:1000px;
+  margin:auto;
+  padding:40px 20px;
+}
+
+/* カード */
+.card{
+  background:var(--card);
+  padding:25px;
+  border-radius:14px;
+  margin-bottom:25px;
+  box-shadow:0 4px 20px rgba(0,0,0,0.25);
+
+  opacity:0;
+  transform:translateY(40px);
+  transition:0.6s;
+}
+
+.card.show{
+  opacity:1;
+  transform:translateY(0);
+}
+
+button{
+  background:var(--accent);
+  border:none;
+  padding:12px 22px;
+  border-radius:8px;
+  color:white;
+  font-size:16px;
+  cursor:pointer;
+  margin:8px;
+}
+
+button:hover{transform:scale(1.05);}
+
+footer{
+  text-align:center;
+  padding:30px;
+  opacity:0.7;
+}
+</style>
+</head>
+
+<body>
+
+<div class="toggle">
+<button onclick="toggleMode()">🌙/☀️</button>
+</div>
+
+<nav>
+<div><b>ぴーbot</b></div>
+<div>
+<a href="index.html">ホーム</a>
+<a href="commands.html">コマンド</a>
+<a href="faq.html">FAQ</a>
+</div>
+</nav>
+
+<header>
+<h1>ぴーbot公式サイト</h1>
+<p>サーバーを活性化しつつ、荒らしからサーバーを守る多機能bot</p>
+
+<button onclick="window.open('https://discord.com/oauth2/authorize?client_id=1423901864038236221')">招待する</button>
+<button onclick="window.open('https://discord.gg/nr7heWHaPj')">サポートサーバー</button>
+</header>
+
+<div class="container">
+
+<div class="card">
+<h2>🤖 ぴーbotとは？</h2>
+<p>多機能で楽しく便利なDiscord Botです。</p>
+</div>
+
+<div class="card">
+<h2>🔢 数字カウントゲーム</h2>
+<p>協力して数字を繋げるゲーム機能。</p>
+</div>
+
+<div class="card">
+<h2>💰 コインシステム</h2>
+<p>活動やゲームでコインを獲得できます。</p>
+</div>
+
+<div class="card">
+<h2>👋 挨拶機能</h2>
+<p>挨拶メッセージに自動反応します。</p>
+</div>
+
+<div class="card">
+<h2>📌 PINメッセージ更新</h2>
+<p>メッセージを自動で最新に保ちます。</p>
+</div>
+
+</div>
+
+<footer>
+© 2026 ぴーbot<br>
+開発: ぴー<br>
+botサーバー: TZ
+</footer>
+
+<script>
+function toggleMode(){
+  document.body.classList.toggle("light");
+}
+
+/* スクロール表示 */
+const cards = document.querySelectorAll('.card');
+
+function showCards(){
+  const trigger = window.innerHeight * 0.85;
+
+  cards.forEach(card=>{
+    const top = card.getBoundingClientRect().top;
+    if(top < trigger){
+      card.classList.add('show');
+    }
+  });
+}
+
+window.addEventListener('scroll', showCards);
+showCards();
+</script>
+
+</body>
+</html>
