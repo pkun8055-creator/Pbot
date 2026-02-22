@@ -1,13 +1,86 @@
+<!DOCTYPE html>
+<html lang="ja">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>ステータス | ぴーbot</title>
+
+<link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.2/css/all.min.css" />
+
 <style>
+:root{
+  --bg: #0b1120;
+  --card: #161e2e;
+  --accent: #22c55e;
+  --text: #f8fafc;
+  --sub-text: #94a3b8;
+}
+
+body {
+  margin: 0;
+  font-family: 'Segoe UI', Roboto, Helvetica, Arial, sans-serif;
+  background: var(--bg);
+  color: var(--text);
+  line-height: 1.6;
+}
+
+/* ナビゲーション（他ページと完全統一） */
+nav {
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+  padding: 15px 5%;
+  background: rgba(11, 17, 32, 0.8);
+  backdrop-filter: blur(10px);
+  position: sticky;
+  top: 0;
+  z-index: 1000;
+  border-bottom: 1px solid rgba(255, 255, 255, 0.1);
+}
+
+nav a {
+  color: white;
+  text-decoration: none;
+  margin-left: 20px;
+  font-weight: 600;
+  transition: 0.3s;
+  opacity: 0.8;
+}
+
+nav a:hover {
+  opacity: 1;
+  color: var(--accent);
+}
+
+.container {
+  max-width: 900px;
+  margin: auto;
+  padding: 60px 20px;
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+}
+
+h1 {
+  text-align: center;
+  font-size: 2.5rem;
+  margin-bottom: 40px;
+  background: linear-gradient(to right, #fff, var(--accent));
+  -webkit-background-clip: text;
+  -webkit-text-fill-color: transparent;
+}
+
 /* ステータスセクション全体のカードデザイン */
 .status-section {
   background: var(--card);
-  padding: 35px;
+  padding: 40px 20px;
   border-radius: 24px;
-  margin-bottom: 30px;
+  width: 100%;
+  max-width: 500px; /* カードの横幅を調整 */
   box-shadow: 0 20px 50px rgba(0,0,0,0.3);
   border: 1px solid rgba(255,255,255,0.03);
   text-align: center;
+  box-sizing: border-box;
 }
 
 .status-section h2 {
@@ -26,17 +99,17 @@
   display: inline-flex;
   align-items: center;
   gap: 10px;
-  padding: 12px 25px;
-  background: rgba(0, 0, 0, 0.2);
+  padding: 12px 30px;
+  background: rgba(0, 0, 0, 0.3);
   border-radius: 50px;
   font-weight: bold;
-  font-size: 1.1rem;
-  margin-bottom: 30px;
+  font-size: 1.2rem;
+  margin-bottom: 35px;
   border: 1px solid rgba(255, 255, 255, 0.05);
   transition: all 0.3s ease;
 }
 
-/* 稼働中（オンライン）の時の光るアニメーション */
+/* オンライン時のパルスアニメーション */
 .status-online {
   color: #22c55e;
   text-shadow: 0 0 10px rgba(34, 197, 94, 0.5);
@@ -45,47 +118,88 @@
 
 @keyframes pulse-green {
   0% { box-shadow: 0 0 0 0 rgba(34, 197, 94, 0.4); }
-  70% { box-shadow: 0 0 0 10px rgba(34, 197, 94, 0); }
+  70% { box-shadow: 0 0 0 15px rgba(34, 197, 94, 0); }
   100% { box-shadow: 0 0 0 0 rgba(34, 197, 94, 0); }
 }
 
-/* オフラインの時 */
 .status-offline {
   color: #ef4444;
   text-shadow: 0 0 10px rgba(239, 68, 68, 0.5);
 }
 
-/* Discordウィジェットの調整 */
+/* Discordウィジェットのレスポンシブ調整 */
+.widget-container {
+  width: 100%;
+  max-width: 350px;
+  margin: 0 auto;
+}
+
 iframe.discord-widget {
   border: none;
-  border-radius: 12px;
-  box-shadow: 0 10px 20px rgba(0,0,0,0.2);
-  max-width: 100%; /* スマホ対応 */
+  border-radius: 16px;
+  box-shadow: 0 10px 30px rgba(0,0,0,0.4);
+  width: 100%; /* 親要素に合わせる */
+}
+
+footer {
+  text-align: center;
+  padding: 60px;
+  opacity: 0.5;
+  font-size: 0.9rem;
+}
+
+/* スマホ対応の微調整 */
+@media (max-width: 480px) {
+  h1 { font-size: 2rem; }
+  .status-section { padding: 30px 15px; }
+  .status-box { font-size: 1rem; padding: 10px 20px; }
+  iframe.discord-widget { height: 400px; } /* スマホでは少し高さを抑える */
 }
 </style>
+</head>
 
-<section class="status-section">
-  <h2><i class="fas fa-signal"></i> ぴーbot ステータス</h2>
+<body>
 
-  <div id="bot-status" class="status-box">
-    状態を確認中...
+<nav>
+  <div style="font-size:1.2rem; font-weight:800; color:var(--accent);">ぴーbot</div>
+  <div>
+    <a href="index.html">ホーム</a>
+    <a href="commands.html">コマンド</a>
+    <a href="faq.html">FAQ</a>
   </div>
+</nav>
 
-  <br>
+<div class="container">
 
-  <iframe 
-    class="discord-widget"
-    src="https://discord.com/widget?id=1474924120406888470&theme=dark" 
-    width="350" 
-    height="500" 
-    allowtransparency="true" 
-    frameborder="0">
-  </iframe>
-</section>
+  <h1>📊 システムステータス</h1>
+
+  <section class="status-section">
+    <h2><i class="fas fa-signal"></i> ぴーbot 稼働状況</h2>
+
+    <div id="bot-status" class="status-box">
+      <i class="fas fa-spinner fa-spin"></i> 確認中...
+    </div>
+
+    <div class="widget-container">
+      <iframe 
+        class="discord-widget"
+        src="https://discord.com/widget?id=1474924120406888470&theme=dark" 
+        height="500" 
+        allowtransparency="true" 
+        frameborder="0">
+      </iframe>
+    </div>
+  </section>
+
+</div>
+
+<footer>
+  <p>© 2026 ぴーbot | 開発: ぴー</p>
+</footer>
 
 <script>
-const BOT_NAME = "ぴーbot"; // BOTの名前
-const GUILD_ID = "1297833075677593641"; // サーバーID
+const BOT_NAME = "ぴーbot"; 
+const GUILD_ID = "1297833075677593641"; 
 
 async function checkBot() {
   try {
@@ -93,7 +207,6 @@ async function checkBot() {
     const data = await res.json();
 
     const members = data.members;
-    // username だけでなく、nick (サーバー内ニックネーム) も含めて探すように強化
     const bot = members.find(m => 
       (m.username && m.username.includes(BOT_NAME)) || 
       (m.nick && m.nick.includes(BOT_NAME))
@@ -115,5 +228,8 @@ async function checkBot() {
 }
 
 checkBot();
-setInterval(checkBot, 30000); // 30秒ごと更新
+setInterval(checkBot, 30000); 
 </script>
+
+</body>
+</html>
