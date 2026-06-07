@@ -14,6 +14,15 @@
   --accent: #22c55e;
   --text: #f8fafc;
   --sub-text: #94a3b8;
+  --nav-bg: rgba(11, 17, 32, 0.8);
+}
+
+body.light{
+  --bg: #f8fafc;
+  --card: #ffffff;
+  --text: #0f172a;
+  --sub-text: #64748b;
+  --nav-bg: rgba(248, 250, 252, 0.8);
 }
 
 body {
@@ -22,15 +31,18 @@ body {
   background: var(--bg);
   color: var(--text);
   line-height: 1.6;
+  transition: background 0.3s, color 0.3s;
 }
 
-/* ナビゲーション（他ページと完全統一） */
+/* ==========================================
+   ナビゲーション＆ハンバーガー
+========================================== */
 nav {
   display: flex;
   justify-content: space-between;
   align-items: center;
   padding: 15px 5%;
-  background: rgba(11, 17, 32, 0.8);
+  background: var(--nav-bg);
   backdrop-filter: blur(10px);
   position: sticky;
   top: 0;
@@ -38,20 +50,77 @@ nav {
   border-bottom: 1px solid rgba(255, 255, 255, 0.1);
 }
 
-nav a {
-  color: white;
-  text-decoration: none;
-  margin-left: 12px;
-  font-weight: 600;
-  transition: 0.3s;
-  opacity: 0.8;
+body.light nav {
+  border-bottom: 1px solid rgba(0, 0, 0, 0.05);
 }
 
-nav a:hover {
-  opacity: 1;
+nav .logo {
+  font-size: 1.5rem;
+  font-weight: 800;
   color: var(--accent);
 }
 
+nav .links {
+  display: flex;
+  align-items: center;
+}
+
+nav .links a {
+  color: var(--text);
+  text-decoration: none;
+  margin-left: 15px;
+  font-weight: 600;
+  font-size: 0.9rem;
+  transition: 0.2s;
+}
+
+nav .links a:hover {
+  color: var(--accent);
+}
+
+/* ハンバーガーアイコン */
+.menu-icon {
+  display: none;
+  width: 28px;
+  height: 20px;
+  position: relative;
+  cursor: pointer;
+  z-index: 1001;
+}
+
+.menu-icon span {
+  position: absolute;
+  width: 100%;
+  height: 3px;
+  background: var(--text);
+  border-radius: 3px;
+  transition: 0.3s cubic-bezier(0.25, 0.1, 0.25, 1);
+}
+
+.menu-icon span:nth-child(1) { top: 0; }
+.menu-icon span:nth-child(2) { top: 50%; transform: translateY(-50%); }
+.menu-icon span:nth-child(3) { bottom: 0; }
+
+.menu-icon.active span:nth-child(1) { top: 50%; transform: translateY(-50%) rotate(45deg); }
+.menu-icon.active span:nth-child(2) { opacity: 0; }
+.menu-icon.active span:nth-child(3) { bottom: 50%; transform: translateY(50%) rotate(-45deg); }
+
+.toggle-btn {
+  background: rgba(0,0,0,0.2);
+  color: var(--text);
+  border: 1px solid rgba(128,128,128,0.3);
+  padding: 6px 12px;
+  border-radius: 12px;
+  cursor: pointer;
+  font-size: 1rem;
+  margin-left: 15px;
+}
+
+body.light .toggle-btn { background: rgba(0,0,0,0.05); }
+
+/* ==========================================
+   メインコンテンツ
+========================================== */
 .container {
   max-width: 900px;
   margin: auto;
@@ -64,23 +133,27 @@ nav a:hover {
 h1 {
   text-align: center;
   font-size: 2.5rem;
-  margin-bottom: 40px;
-  background: linear-gradient(to right, #fff, var(--accent));
-  -webkit-background-clip: text;
-  -webkit-text-fill-color: transparent;
+  margin-bottom: 50px;
+  /* 修正：背景色をグラデーションではなくシンプルにカラー指定することでアイコンの色破綻を防ぐ */
+  color: var(--text);
 }
 
-/* ステータスセクション全体のカードデザイン */
+/* ステータスセクション */
 .status-section {
   background: var(--card);
   padding: 40px 20px;
   border-radius: 24px;
   width: 100%;
-  max-width: 500px; /* カードの横幅を調整 */
+  max-width: 500px;
   box-shadow: 0 20px 50px rgba(0,0,0,0.3);
   border: 1px solid rgba(255,255,255,0.03);
   text-align: center;
   box-sizing: border-box;
+}
+
+body.light .status-section {
+  box-shadow: 0 10px 30px rgba(0,0,0,0.05);
+  border: 1px solid rgba(0,0,0,0.05);
 }
 
 .status-section h2 {
@@ -94,66 +167,46 @@ h1 {
   gap: 12px;
 }
 
-/* ステータス表示ボックス */
 .status-box {
   display: inline-flex;
   align-items: center;
   gap: 10px;
   padding: 12px 30px;
-  background: rgba(0, 0, 0, 0.3);
+  background: rgba(0, 0, 0, 0.1);
   border-radius: 50px;
   font-weight: bold;
   font-size: 1.2rem;
   margin-bottom: 35px;
-  border: 1px solid rgba(255, 255, 255, 0.05);
-  transition: all 0.3s ease;
+  border: 1px solid rgba(128,128,128,0.2);
 }
 
-/* オンライン時のパルスアニメーション */
-.status-online {
-  color: #22c55e;
-  text-shadow: 0 0 10px rgba(34, 197, 94, 0.5);
-  animation: pulse-green 2s infinite;
-}
+.status-online { color: #22c55e; }
+.status-offline { color: #ef4444; }
 
-@keyframes pulse-green {
-  0% { box-shadow: 0 0 0 0 rgba(34, 197, 94, 0.4); }
-  70% { box-shadow: 0 0 0 15px rgba(34, 197, 94, 0); }
-  100% { box-shadow: 0 0 0 0 rgba(34, 197, 94, 0); }
-}
+.widget-container { width: 100%; max-width: 350px; margin: 0 auto; }
+iframe.discord-widget { border: none; border-radius: 16px; width: 100%; box-shadow: 0 10px 30px rgba(0,0,0,0.2); }
 
-.status-offline {
-  color: #ef4444;
-  text-shadow: 0 0 10px rgba(239, 68, 68, 0.5);
-}
+/* モーダル共通・フッターは他のページと同じのため省略 */
+footer { text-align: center; padding: 60px 20px; font-size: 0.9rem; opacity: 0.6; }
+footer a { color: var(--accent); text-decoration: none; margin: 0 10px; }
 
-/* Discordウィジェットのレスポンシブ調整 */
-.widget-container {
-  width: 100%;
-  max-width: 350px;
-  margin: 0 auto;
-}
-
-iframe.discord-widget {
-  border: none;
-  border-radius: 16px;
-  box-shadow: 0 10px 30px rgba(0,0,0,0.4);
-  width: 100%; /* 親要素に合わせる */
-}
-
-footer {
-  text-align: center;
-  padding: 60px;
-  opacity: 0.5;
-  font-size: 0.9rem;
-}
-
-/* スマホ対応の微調整 */
-@media (max-width: 480px) {
-  h1 { font-size: 2rem; }
-  .status-section { padding: 30px 15px; }
-  .status-box { font-size: 1rem; padding: 10px 20px; }
-  iframe.discord-widget { height: 400px; } /* スマホでは少し高さを抑える */
+/* スマホ対応 */
+@media (max-width: 768px) {
+  .menu-icon { display: block; }
+  nav .links {
+    display: none;
+    flex-direction: column;
+    position: absolute;
+    top: 100%;
+    left: 0;
+    width: 100%;
+    background: var(--card);
+    padding: 20px 0;
+    border-bottom: 1px solid rgba(255,255,255,0.1);
+  }
+  nav .links.active { display: flex; }
+  nav .links a { margin: 12px 0; }
+  .toggle-btn { margin-left: 0; margin-top: 10px; padding: 10px 20px; }
 }
 </style>
 </head>
@@ -161,18 +214,24 @@ footer {
 <body>
 
 <nav>
-  <div style="font-size:1.2rem; font-weight:800; color:var(--accent);">ぴーbot</div>
-  <div>
+  <div class="logo">ぴーbot</div>
+  <div class="menu-icon" onclick="toggleMenu()">
+    <span></span>
+    <span></span>
+    <span></span>
+  </div>
+  <div class="links" id="navLinks">
     <a href="index.html">ホーム</a>
     <a href="commands.html">コマンド</a>
     <a href="faq.html">FAQ</a>
     <a href="Status.html">ステータス</a>
+    <button class="toggle-btn" onclick="toggleMode()">🌓</button>
   </div>
 </nav>
 
 <div class="container">
 
-  <h1>📊 システムステータス</h1>
+  <h1><i class="fas fa-chart-line" style="color:var(--accent);"></i> システムステータス</h1>
 
   <section class="status-section">
     <h2><i class="fas fa-signal"></i> ぴーbot 稼働状況</h2>
@@ -199,6 +258,12 @@ footer {
 </footer>
 
 <script>
+function toggleMode(){ document.body.classList.toggle("light"); }
+function toggleMenu() {
+  document.getElementById('navLinks').classList.toggle('active');
+  document.querySelector('.menu-icon').classList.toggle('active');
+}
+
 const BOT_NAME = "ぴーBot"; 
 const GUILD_ID = "1474924120406888470"; 
 
@@ -206,13 +271,7 @@ async function checkBot() {
   try {
     const res = await fetch(`https://discord.com/api/guilds/${GUILD_ID}/widget.json`);
     const data = await res.json();
-
-    const members = data.members;
-    const bot = members.find(m => 
-      (m.username && m.username.includes(BOT_NAME)) || 
-      (m.nick && m.nick.includes(BOT_NAME))
-    );
-
+    const bot = data.members.find(m => (m.username && m.username.includes(BOT_NAME)) || (m.nick && m.nick.includes(BOT_NAME)));
     const statusBox = document.getElementById("bot-status");
 
     if (bot && bot.status === "online") {
@@ -227,7 +286,6 @@ async function checkBot() {
     document.getElementById("bot-status").style.color = "#94a3b8";
   }
 }
-
 checkBot();
 setInterval(checkBot, 30000); 
 </script>
